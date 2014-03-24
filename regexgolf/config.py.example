@@ -1,0 +1,9 @@
+SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/example.db'
+SECRET_KEY = 'createasecretheredonttellanyone'
+
+LDAP_SERVER = 'example.com'
+LDAP_PASSWORD = password'
+BIND_DN = ''
+BASE_DN = ''
+
+ADMIN_USERNAMES = []
