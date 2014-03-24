@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>{{ title }}</title>
+
+	<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+	<header>
+		<h1>{{ title }}</h1>
+	</header>
+
+	<section>
+
+		{% block main %}{%- endblock main %}
+
+	</section>
+
+	<footer>
+		Public domain. Site by <a href="http://ianonavy.com">Ian Naval</a>. Based on <a href="http://callumacrae.github.io/regex-tuesday/">Regex Tuesday</a>.
+	</footer>
+
+	{% block javascript %}<script src="{{ url_for('static', filename='main.js') }}"></script>{% endblock javascript %}
+</body>
+</html>
