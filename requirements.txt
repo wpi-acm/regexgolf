@@ -1,3 +1,4 @@
 flask
+flask-admin
 flask-sqlalchemy
 flup
