@@ -232,6 +232,11 @@ footer {
 	background-color: #efe;
 }
 
-.flashes li {
+.character-count {
+	text-align: right;
+	margin: 0 1em;
+}
 
+.hidden {
+	display: none;
 }

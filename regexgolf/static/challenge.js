@@ -5,6 +5,7 @@ var find = document.getElementById('find'),
 	testElements = document.getElementById('tests').getElementsByTagName('dt'),
 	permalink = document.getElementById('permalink'),
 	submit = document.getElementById('submit'),
+	characterCount = document.getElementById('character-count'),
 	cases = [],
 	element, i, urlParts;
 
@@ -24,6 +25,7 @@ for (i = 0; i < testElements.length; i++) {
 // For validating and live-testing of the regex
 find.addEventListener('keyup', function(e){
 	validateRegex(false);
+	countCharacters();
 });
 find.addEventListener('blur', function(e){
 	validateRegex(true);
@@ -79,6 +81,10 @@ submit.addEventListener('click', function () {
 	}
 	http.send(params);
 });
+
+function countCharacters() {
+	characterCount.textContent = find.value.length;
+}
 
 function validateRegex(warnUser) {
 	var regex = find.value,
