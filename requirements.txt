@@ -1,5 +1,7 @@
 flask
 flask-admin
 flask-sqlalchemy
+flask-login
 flask-migrate
 flup
+simpleldap

@@ -5,6 +5,7 @@ head, body {
 }
 
 header {
+	width: 600px;
 	margin: 30px auto;
 	text-align: center;
 }
@@ -199,3 +200,23 @@ footer {
 	display: block;
 }
 
+.login {
+	width: 300px;
+	margin: 0 auto;
+}
+
+.login input, .login button {
+	margin: 0;
+}
+
+.top {
+	text-align: left;
+}
+
+.welcome {
+	margin: 0;
+}
+
+.signoff {
+	float: right;
+}

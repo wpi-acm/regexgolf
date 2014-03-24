@@ -13,13 +13,12 @@
  			<textarea id="find" placeholder="/regexp? here/i"></textarea>
  		</p>
 
-
-		<h3>Test cases (<span id='passed-count'>0</span>/{{ challenge.num_tests() }}) <a id='permalink' class='button' href='./challenge2.html'>Permalink</a> <label id="hide_passing"><input type="checkbox"> Hide passing tests</label></h3>
+		<h3>Test cases (<span id='passed-count'>0</span>/{{ challenge.num_tests() }}) <a id="permalink" class="button" href="{{ url_for('challenge', challenge_id=challenge.id) }}">Permalink</a> <label id="hide_passing"><input type="checkbox"> Hide passing tests</label></h3>
 		<dl id='tests'>
-			{% for test in challenge.positive_cases.split(',') %}
+			{% for test in challenge.positive_cases.split('\n') %}
 			<dt>{{ test }}</dt><dd>match</dd>
 			{%- endfor %}
-			{% for test in challenge.negative_cases.split(',') %}
+			{% for test in challenge.negative_cases.split('\n') %}
 			<dt>{{ test }}</dt><dd>no match</dd>
 			{%- endfor %}
 		</dl>

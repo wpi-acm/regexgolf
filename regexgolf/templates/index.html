@@ -5,7 +5,7 @@
 			{%- for challenge in challenges %}
 			<li><a href="{{ url_for('challenge', challenge_id=challenge.id) }}" class="challenge">
 				<date>{{ challenge.date.date() }}</date>
-				{{ challenge.name }} - {{ challenge.description }}
+				#{{ challenge.id }} {{ challenge.name }} - {{ challenge.description }}
 			</a></li>
 			{%- endfor %}
 		</ul>
