@@ -2,6 +2,7 @@
 
 import simpleldap
 import ldap
+import re
 from flask import Flask, render_template, request, redirect, url_for, g, \
     flash
 from flask.ext.admin import Admin, BaseView, expose
@@ -45,6 +46,16 @@ class Challenge(db.Model):
                 len(self.negative_cases.split('\n')))
 
     def verify(self, regex):
+        try:
+            # Clean up regex
+            regex = regex.replace("\\", "\\\\").strip('/').rstrip('/i')
+            prog = re.compile(regex)
+            for test in self.positive_cases.split('\n'):
+                assert prog.search(test) is not None
+            for test in self.negative_cases.split('\n'):
+                assert prog.search(test) is None
+        except AssertionError:
+            return False
         return True
 
     def __repr__(self):
@@ -115,8 +126,6 @@ def ldap_fetch(uid=None, name=None, passwd=None):
         result = conn.search(
             'uidNumber={0}'.format(uid),
             base_dn=config.BASE_DN)
-    # except:
-    #     return None
 
     if result:
         return {
@@ -202,6 +211,7 @@ def challenge(challenge_id):
                 db.session.commit()
             flash("Your submission has been received!")
             return url_for('home')
+        return ""
 
 
 
