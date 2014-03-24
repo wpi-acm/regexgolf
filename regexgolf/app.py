@@ -44,7 +44,7 @@ class Challenge(db.Model):
         return (len(self.positive_cases.split('\n')) +
                 len(self.negative_cases.split('\n')))
 
-    def verify(self):
+    def verify(self, regex):
         return True
 
     def __repr__(self):

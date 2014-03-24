@@ -14,6 +14,12 @@
  		</p>
 
 		<h3>Test cases (<span id='passed-count'>0</span>/{{ challenge.num_tests() }}) <a id="permalink" class="button" href="{{ url_for('challenge', challenge_id=challenge.id) }}">Permalink</a> <label id="hide_passing"><input type="checkbox"> Hide passing tests</label></h3>
+		<div id="congratulations">
+			<span>Congratulations, your regex passes all the test cases! Remember to share this challenge.</span>
+			<div class="submission">
+				<button id="submit" class="button">Submit Solution</button>
+			</div>
+		</div>
 		<dl id='tests'>
 			{% for test in challenge.positive_cases.split('\n') %}
 			<dt>{{ test.strip() }}</dt><dd>match</dd>
@@ -22,12 +28,7 @@
 			<dt>{{ test.strip() }}</dt><dd>no match</dd>
 			{%- endfor %}
 		</dl>
-		<div id="congratulations">
-			<span>Congratulations, your regex passes all the test cases! Remember to share this challenge.</span>
-			<div class="submission">
-				<button id="submit" class="button">Submit Solution</button>
-			</div>
-		</div>
+
 	</section>
 {% endblock %}
 

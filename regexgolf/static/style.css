@@ -196,7 +196,7 @@ footer {
 	display: none;
 }
 
-.hide_passing.all_passing #congratulations {
+.all_passing #congratulations {
 	display: block;
 }
 
