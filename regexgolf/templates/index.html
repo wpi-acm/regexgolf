@@ -1,6 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block main %}
+		<p>Welcome to the WPI Regular Expression competition! Your goal for this competition is to write the shortest regex possible to make all test cases pass. Each week we will release 3 challenges, one easy, one medium and one hard. Good luck!</p>
+
 		<ul class="challenges">
 			{%- for challenge in challenges %}
 			<li><a href="{{ url_for('challenge', challenge_id=challenge.id) }}" class="challenge">
