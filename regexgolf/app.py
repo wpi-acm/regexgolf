@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 import simpleldap
-from flask import Flask, render_template, request, redirect, url_for, g
+from flask import Flask, render_template, request, redirect, url_for, g, \
+    flash
 from flask.ext.admin import Admin, BaseView, expose
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.login import LoginManager, login_user, UserMixin, \
@@ -35,13 +36,34 @@ class Challenge(db.Model):
     date = db.Column(db.DateTime())
     positive_cases = db.Column(db.String())
     negative_cases = db.Column(db.String())
+    solutions = db.relationship('Solution', backref='challenge',
+                                lazy='dynamic')
 
     def num_tests(self):
         return (len(self.positive_cases.split('\n')) +
                 len(self.negative_cases.split('\n')))
 
+    def verify(self):
+        return True
+
     def __repr__(self):
         return '<Challenge %r>' % self.name
+
+
+class Solution(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    challenge_id = db.Column(db.Integer, db.ForeignKey('challenge.id'))
+    value = db.Column(db.String())
+    user = db.Column(db.String())
+
+    def __init__(self, user, challenge_id, solution):
+        self.user = user.username
+        self.challenge_id = challenge_id
+        self.value = solution
+
+    def __repr__(self):
+        return '<Solution for %r: %r>' % (self.challenge_id, self.user)
 
 
 # ADMIN
@@ -57,17 +79,18 @@ class RegexGolfModelView(ModelView):
 
 admin = Admin(app, name="WPI ACM Regex Golf")
 admin.add_view(RegexGolfModelView(Challenge, db.session))
+admin.add_view(RegexGolfModelView(Solution, db.session))
 
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 
 # AUTH
 def ldap_fetch(uid=None, name=None, passwd=None):
     try:
         if name is not None and passwd is not None:
-            print 'here'
             l = simpleldap.Connection(config.LDAP_SERVER, port=636,
                 require_cert=False,
                 dn=config.BIND_DN, password=config.LDAP_PASSWORD,
@@ -133,13 +156,27 @@ def home():
         'index.html', title="WPI ACM - Regex Golf", challenges=challenges)
 
 
-@app.route('/challenge/<challenge_id>')
+@app.route('/challenge/<challenge_id>', methods=["GET", "POST"])
+@login_required
 def challenge(challenge_id):
     challenge = Challenge.query.get(challenge_id)
-    return render_template(
-        'challenge.html',
-        title="#{} - {}".format(challenge_id, challenge.name),
-        challenge=challenge)
+    if challenge is None:
+        return redirect(url_for('home'))
+
+    if request.method == "GET":
+        return render_template(
+            'challenge.html',
+            title="#{} - {}".format(challenge_id, challenge.name),
+            challenge=challenge)
+    elif request.method == "POST":
+        regex = request.form['solution']
+        if challenge.verify(regex):
+            solution = Solution(current_user, challenge_id, regex)
+            db.session.add(solution)
+            db.session.commit()
+            flash("Your submission has been received!")
+            return redirect(url_for('home'))
+
 
 
 @app.route("/login", methods=["GET", "POST"])
