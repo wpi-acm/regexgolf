@@ -4,6 +4,7 @@ var find = document.getElementById('find'),
 	passedCount = document.getElementById('passed-count'),
 	testElements = document.getElementById('tests').getElementsByTagName('dt'),
 	permalink = document.getElementById('permalink'),
+	submit = document.getElementById('submit'),
 	cases = [],
 	element, i, urlParts;
 
@@ -59,6 +60,22 @@ if (window.localStorage.hidePassing === 'true') {
 	document.body.classList.add('hide_passing');
 	hidePassing.checked = true;
 }
+
+submit.addEventListener('click', function () {
+	var http = new XMLHttpRequest();
+	var url = window.location.href;
+	var params = "solution=" + find.value;
+	http.open("POST", url, true);
+
+	//Send the proper header information along with the request
+	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.onreadystatechange = function() {//Call a function when the state changes.
+		if (http.readyState == 4 && http.status == 200) {
+			document.write(http.responseText);
+		}
+	}
+	http.send(params);
+});
 
 function validateRegex(warnUser) {
 	var regex = find.value,
