@@ -4,4 +4,4 @@ flask-sqlalchemy
 flask-login
 flask-migrate
 flup
-simpleldap
+git+git://github.com/gdub/python-simpleldap.git
