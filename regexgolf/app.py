@@ -190,11 +190,18 @@ def challenge(challenge_id):
     elif request.method == "POST":
         regex = request.form['solution']
         if challenge.verify(regex):
-            solution = Solution(current_user, challenge_id, regex)
-            db.session.add(solution)
-            db.session.commit()
+            existing_solution = Solution.query.filter_by(
+                user=current_user.username, challenge_id=challenge_id)
+            if existing_solution is not None:
+                existing_solution = existing_solution.first()
+                existing_solution.value = regex
+                db.session.commit()
+            else:
+                solution = Solution(current_user, challenge_id, regex)
+                db.session.add(solution)
+                db.session.commit()
             flash("Your submission has been received!")
-            return redirect(url_for('home'))
+            return url_for('home')
 
 
 

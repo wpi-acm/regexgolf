@@ -21,15 +21,15 @@
 
 	<section>
 
-	{% with messages = get_flashed_messages() %}
-		{% if messages %}
+	{%- with messages = get_flashed_messages() %}
+		{%- if messages %}
 		<ul class=flashes>
-			{% for message in messages %}
+			{%- for message in messages %}
 			<li>{{ message }}</li>
-			{% endfor %}
+			{%- endfor %}
 		</ul>
-		{% endif %}
-	{% endwith %}
+		{%- endif %}
+	{%- endwith %}
 
 		{% block main %}{%- endblock main %}
 
