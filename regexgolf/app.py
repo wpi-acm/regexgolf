@@ -3,6 +3,8 @@
 from flask import Flask, render_template
 from flask.ext.admin import Admin, BaseView, expose
 from flask.ext.admin.contrib.sqla import ModelView
+from flask.ext.migrate import Migrate, MigrateCommand
+from flask.ext.script import Manager
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from config import DATABASE_URI
@@ -11,6 +13,10 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
 
 
 class Challenge(db.Model):
@@ -50,4 +56,4 @@ def challenge(challenge_id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    manager.run()
