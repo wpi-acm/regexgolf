@@ -1,3 +1,7 @@
 flask
+flask-admin
 flask-sqlalchemy
+flask-login
+flask-migrate
 flup
+git+git://github.com/gdub/python-simpleldap.git

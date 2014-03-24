@@ -4,6 +4,7 @@ var find = document.getElementById('find'),
 	passedCount = document.getElementById('passed-count'),
 	testElements = document.getElementById('tests').getElementsByTagName('dt'),
 	permalink = document.getElementById('permalink'),
+	submit = document.getElementById('submit'),
 	cases = [],
 	element, i, urlParts;
 
@@ -16,7 +17,7 @@ for (i = 0; i < testElements.length; i++) {
 	};
 
 	// Add the "it should've been X" element to each test case
-	element.parentNode.insertBefore(document.createElement('dd'), 
+	element.parentNode.insertBefore(document.createElement('dd'),
 		element.nextSibling.nextSibling);
 };
 
@@ -59,6 +60,25 @@ if (window.localStorage.hidePassing === 'true') {
 	document.body.classList.add('hide_passing');
 	hidePassing.checked = true;
 }
+
+submit.addEventListener('click', function () {
+	var http = new XMLHttpRequest();
+	var url = window.location.href;
+	var params = "solution=" + find.value;
+	http.open("POST", url, true);
+
+	//Send the proper header information along with the request
+	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.onreadystatechange = function() {//Call a function when the state changes.
+		if (http.readyState == 4 && http.status == 200) {
+			if (http.responseText.length != 0) {
+				window.location.href = http.responseText;
+				console.log(http.responseText)
+			}
+		}
+	}
+	http.send(params);
+});
 
 function validateRegex(warnUser) {
 	var regex = find.value,
@@ -116,9 +136,10 @@ function validateRegex(warnUser) {
 					passes++;
 				} else {
 					newClass = 'failed';
+					fails++;
 				}
 			}
-			
+
 			element.nextSibling.className = element.className = newClass;
 		}
 
@@ -135,7 +156,7 @@ function validateRegex(warnUser) {
 	} else if (warnUser) {
 		find.className = 'invalid';
 	}
-	
+
 	return false;
 }
 
