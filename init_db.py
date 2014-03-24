@@ -1,4 +1,4 @@
 #!/usr/bin/env python
 
-from regexgolf.db import db
+from regexgolf import db
 db.create_all()
