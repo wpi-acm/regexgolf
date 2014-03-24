@@ -51,8 +51,9 @@ def home():
 def challenge(challenge_id):
     challenge = Challenge.query.get(challenge_id)
     return render_template(
-        'challenge.html', challenge=challenge)
-
+        'challenge.html',
+        title="WPI ACM Regex Golf #{} - {}".format(challenge_id, challenge.name),
+        challenge=challenge)
 
 
 if __name__ == '__main__':
