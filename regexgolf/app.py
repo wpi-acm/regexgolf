@@ -17,6 +17,7 @@ class Challenge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String())
     description = db.Column(db.String())
+    details = db.Column(db.String())
     date = db.Column(db.DateTime())
     positive_cases = db.Column(db.String())
     negative_cases = db.Column(db.String())
