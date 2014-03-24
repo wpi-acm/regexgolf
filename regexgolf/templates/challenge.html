@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block main %}
-		<p>{{ challenge.details }}</p>
+		<div id="details">{{ challenge.details|safe }}</div>
 
 		<p class='single-input'>
  			<textarea id="find" placeholder="/regexp? here/i"></textarea>
@@ -16,10 +16,10 @@
 		<h3>Test cases (<span id='passed-count'>0</span>/{{ challenge.num_tests() }}) <a id="permalink" class="button" href="{{ url_for('challenge', challenge_id=challenge.id) }}">Permalink</a> <label id="hide_passing"><input type="checkbox"> Hide passing tests</label></h3>
 		<dl id='tests'>
 			{% for test in challenge.positive_cases.split('\n') %}
-			<dt>{{ test }}</dt><dd>match</dd>
+			<dt>{{ test.strip() }}</dt><dd>match</dd>
 			{%- endfor %}
-			{% for test in challenge.negative_cases.split('\n') %}
-			<dt>{{ test }}</dt><dd>no match</dd>
+			{%- for test in challenge.negative_cases.split('\n') %}
+			<dt>{{ test.strip() }}</dt><dd>no match</dd>
 			{%- endfor %}
 		</dl>
 		<div id="congratulations">Congratulations, your regex passes all the test cases! Remember to share this challenge.</div>
