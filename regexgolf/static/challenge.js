@@ -16,7 +16,7 @@ for (i = 0; i < testElements.length; i++) {
 	};
 
 	// Add the "it should've been X" element to each test case
-	element.parentNode.insertBefore(document.createElement('dd'), 
+	element.parentNode.insertBefore(document.createElement('dd'),
 		element.nextSibling.nextSibling);
 };
 
@@ -116,9 +116,10 @@ function validateRegex(warnUser) {
 					passes++;
 				} else {
 					newClass = 'failed';
+					fails++;
 				}
 			}
-			
+
 			element.nextSibling.className = element.className = newClass;
 		}
 
@@ -135,7 +136,7 @@ function validateRegex(warnUser) {
 	} else if (warnUser) {
 		find.className = 'invalid';
 	}
-	
+
 	return false;
 }
 
