@@ -78,7 +78,7 @@ class RegexGolfModelView(ModelView):
         return (current_user.is_authenticated() and current_user.is_admin())
 
 
-admin = Admin(app, name="WPI ACM Regex Golf")
+admin = Admin(app, name="WPI ACM Regex Golf", endpoint='admin')
 admin.add_view(RegexGolfModelView(Challenge, db.session))
 admin.add_view(RegexGolfModelView(Solution, db.session))
 
