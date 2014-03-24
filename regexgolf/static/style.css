@@ -220,3 +220,7 @@ footer {
 .signoff {
 	float: right;
 }
+
+.submission {
+	text-align: center;
+}

@@ -22,7 +22,12 @@
 			<dt>{{ test.strip() }}</dt><dd>no match</dd>
 			{%- endfor %}
 		</dl>
-		<div id="congratulations">Congratulations, your regex passes all the test cases! Remember to share this challenge.</div>
+		<div id="congratulations">
+			<span>Congratulations, your regex passes all the test cases! Remember to share this challenge.</span>
+			<div class="submission">
+				<button class="button submit">Submit Solution</button>
+			</div>
+		</div>
 	</section>
 {% endblock %}
 
