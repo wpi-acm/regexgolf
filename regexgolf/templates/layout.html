@@ -5,10 +5,16 @@
 	<title>{{ title }}</title>
 
 	<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">{%- endblock css %}
 </head>
 <body>
 	<header>
+		{% if g.user.is_authenticated() %}
+		<div class="top">
+			<span class="welcome">Welcome, {{ g.user.name }}!</span>
+			<a class="signoff" href="{{ url_for('logout') }}">Sign out</a>
+		</div>
+		{%- endif %}
 		<h1>{{ title }}</h1>
 		{% block nav %}{%- endblock nav %}
 	</header>
@@ -21,6 +27,7 @@
 
 	<footer>
 		Copyright &copy; 2014 WPI ACM. Site by <a href="http://ianonavy.com">Ian Naval</a>. Based on <a href="http://callumacrae.github.io/regex-tuesday/">Regex Tuesday</a>.
+		{%- if g.user.is_authenticated() and g.user.is_admin() %}<p><a href="/admin/">Admin Area</a></p>{% endif %}
 	</footer>
 
 	{% block javascript %}<script src="{{ url_for('static', filename='main.js') }}"></script>{% endblock javascript %}
