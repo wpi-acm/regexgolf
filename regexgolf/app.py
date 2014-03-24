@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import simpleldap
+import ldap
 from flask import Flask, render_template, request, redirect, url_for, g, \
     flash
 from flask.ext.admin import Admin, BaseView, expose
@@ -89,24 +90,42 @@ login_manager.login_view = 'login'
 
 # AUTH
 def ldap_fetch(uid=None, name=None, passwd=None):
-    try:
-        if name is not None and passwd is not None:
-            l = simpleldap.Connection(config.LDAP_SERVER, port=636,
-                require_cert=False,
-                dn=config.BIND_DN, password=config.LDAP_PASSWORD,
-                encryption='ssl')
-            r = l.search('uid={0}'.format(name), base_dn=config.BASE_DN)
-        else:
-            l = simpleldap.Connection(config.LDAP_SERVER)
-            r = l.search('uidNumber={0}'.format(uid), base_dn=config.BASE_DN)
+    # try:
+    result = None
+    if name is not None and passwd is not None:
+        # weird hack to auth with WPI CCC
+        conn = simpleldap.Connection(
+            config.LDAP_SERVER,
+            port=config.LDAP_PORT,
+            require_cert=False,
+            dn=config.BIND_DN, password=config.LDAP_PASSWORD,
+            encryption='ssl')
+        res = conn.search('uid={0}'.format(name), base_dn=config.BASE_DN)
+        dn = config.BIND_DN_FORMAT.format(res[0]['wpieduPersonUUID'][0])
+        conn = simpleldap.Connection(
+            config.LDAP_SERVER,
+            port=config.LDAP_PORT,
+            require_cert=False,
+            dn=dn, password=passwd,
+            encryption='ssl')
+        if conn:
+            result = res
+    else:
+        conn = simpleldap.Connection(config.LDAP_SERVER)
+        result = conn.search(
+            'uidNumber={0}'.format(uid),
+            base_dn=config.BASE_DN)
+    # except:
+    #     return None
 
+    if result:
         return {
-            'name': r[0]['givenName'][0],
-            'uid': r[0]['uid'][0],
-            'id': unicode(r[0]['uidNumber'][0]),
-            'gid': int(r[0]['gidNumber'][0])
+            'name': result[0]['givenName'][0],
+            'uid': result[0]['uid'][0],
+            'id': unicode(result[0]['uidNumber'][0]),
+            'gid': int(result[0]['gidNumber'][0])
         }
-    except:
+    else:
         return None
 
 
@@ -181,6 +200,8 @@ def challenge(challenge_id):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated():
+        return redirect(url_for('home'))
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User(name=form.username.data, passwd=form.password.data)
