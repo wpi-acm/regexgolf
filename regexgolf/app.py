@@ -201,7 +201,7 @@ def challenge(challenge_id):
         if challenge.verify(regex):
             existing_solution = Solution.query.filter_by(
                 user=current_user.username, challenge_id=challenge_id)
-            if existing_solution is not None:
+            if existing_solution.first() is not None:
                 existing_solution = existing_solution.first()
                 existing_solution.value = regex
                 db.session.commit()
