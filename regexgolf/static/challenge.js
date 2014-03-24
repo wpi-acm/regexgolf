@@ -71,7 +71,10 @@ submit.addEventListener('click', function () {
 	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	http.onreadystatechange = function() {//Call a function when the state changes.
 		if (http.readyState == 4 && http.status == 200) {
-			document.write(http.responseText);
+			if (http.responseText.length != 0) {
+				window.location.href = http.responseText;
+				console.log(http.responseText)
+			}
 		}
 	}
 	http.send(params);

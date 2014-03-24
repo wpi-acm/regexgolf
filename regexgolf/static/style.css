@@ -196,7 +196,7 @@ footer {
 	display: none;
 }
 
-.hide_passing.all_passing #congratulations {
+.all_passing #congratulations {
 	display: block;
 }
 
@@ -223,4 +223,15 @@ footer {
 
 .submission {
 	text-align: center;
+}
+
+.flashes {
+	list-style: none;
+	margin: 0;
+	padding: 8px 16px;
+	background-color: #efe;
+}
+
+.flashes li {
+
 }
