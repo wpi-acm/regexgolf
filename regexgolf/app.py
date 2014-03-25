@@ -49,7 +49,7 @@ class Challenge(db.Model):
     def verify(self, regex):
         try:
             # Clean up regex
-            regex = regex.replace("\\", "\\\\").strip('/').rstrip('/i')
+            regex = regex.strip('/').rstrip('/i')
             prog = re.compile(regex)
             for test in self.positive_cases.split('\n'):
                 assert prog.search(test) is not None
