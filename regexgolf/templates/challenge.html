@@ -9,9 +9,29 @@
 {% block main %}
 		<div id="details">{{ challenge.details|safe }}</div>
 
+		<p class="best">{% if challenge.is_solved() %}The best score for this problem is {{ challenge.best_solution().score() }}.{% else %}This problem has not been solved. Be the first!{% endif %}</p>
+
+		{%- if g.user.has_solved(challenge) %}
+		<p>Your score: {{ g.user.get_solution(challenge).score() }}</p>
+
+		<a id="view-other-solutions" class="button" href="#">View Other Solutions</a>
+		<div id="other-solutions" class="hidden">
+			Your solution is as good or better than:
+			<ul class="others">
+				{%- for solution in challenge.get_others_solutions(g.user) %}
+				<li>{{ solution.value }} [{{ solution.score() }}] ({{ solution.user }})</li>
+				{% else %}
+				You have not beat anyone yet!
+				{% endfor %}
+			</ul>
+		</div>
+		{%- endif %}
+
 		<p class='single-input'>
  			<textarea id="find" placeholder="/regexp? here/i"></textarea>
  		</p>
+
+ 		<p id="character-count" class="character-count">0</p>
 
 		<h3>Test cases (<span id='passed-count'>0</span>/{{ challenge.num_tests() }}) <a id="permalink" class="button" href="{{ url_for('challenge', challenge_id=challenge.id) }}">Permalink</a> <label id="hide_passing"><input type="checkbox"> Hide passing tests</label></h3>
 		<div id="congratulations">

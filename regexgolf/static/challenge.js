@@ -5,6 +5,9 @@ var find = document.getElementById('find'),
 	testElements = document.getElementById('tests').getElementsByTagName('dt'),
 	permalink = document.getElementById('permalink'),
 	submit = document.getElementById('submit'),
+	characterCount = document.getElementById('character-count'),
+	otherSolutions = document.getElementById('other-solutions'),
+	viewOtherSolutions = document.getElementById('view-other-solutions'),
 	cases = [],
 	element, i, urlParts;
 
@@ -24,6 +27,7 @@ for (i = 0; i < testElements.length; i++) {
 // For validating and live-testing of the regex
 find.addEventListener('keyup', function(e){
 	validateRegex(false);
+	countCharacters();
 });
 find.addEventListener('blur', function(e){
 	validateRegex(true);
@@ -34,6 +38,11 @@ if (replace){
 		validateRegex(true);
 	});
 }
+
+viewOtherSolutions.addEventListener('click', function(e) {
+	otherSolutions.className = "";
+	viewOtherSolutions.className += " hidden";
+});
 
 // Allow the URL to contain regex and replace values
 urlParts = location.search.replace('?', '').split(/[\&\=]/);
@@ -79,6 +88,10 @@ submit.addEventListener('click', function () {
 	}
 	http.send(params);
 });
+
+function countCharacters() {
+	characterCount.textContent = find.value.length;
+}
 
 function validateRegex(warnUser) {
 	var regex = find.value,
