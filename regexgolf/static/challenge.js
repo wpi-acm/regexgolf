@@ -6,6 +6,8 @@ var find = document.getElementById('find'),
 	permalink = document.getElementById('permalink'),
 	submit = document.getElementById('submit'),
 	characterCount = document.getElementById('character-count'),
+	otherSolutions = document.getElementById('other-solutions'),
+	viewOtherSolutions = document.getElementById('view-other-solutions'),
 	cases = [],
 	element, i, urlParts;
 
@@ -36,6 +38,11 @@ if (replace){
 		validateRegex(true);
 	});
 }
+
+viewOtherSolutions.addEventListener('click', function(e) {
+	otherSolutions.className = "";
+	viewOtherSolutions.className += " hidden";
+});
 
 // Allow the URL to contain regex and replace values
 urlParts = location.search.replace('?', '').split(/[\&\=]/);

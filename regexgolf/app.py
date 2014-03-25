@@ -12,6 +12,7 @@ from flask.ext.login import LoginManager, login_user, UserMixin, \
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func, and_
 from wtforms.fields import TextAreaField
 
 import config
@@ -58,6 +59,18 @@ class Challenge(db.Model):
             return False
         return True
 
+    def get_others_solutions(self, user):
+        my_score = user.get_solution(self).score()
+        return Solution.query.filter(
+            and_(func.length(Solution.value)) >= my_score,
+                 Solution.user != user.username).all()
+
+    def is_solved(self):
+        return len(Solution.query.filter_by(challenge=self).all()) > 0
+
+    def best_solution(self):
+        return Solution.query.filter_by(challenge=self).order_by(func.length(Solution.value)).first()
+
     def __repr__(self):
         return '<Challenge %r>' % self.name
 
@@ -73,6 +86,9 @@ class Solution(db.Model):
         self.user = user.username
         self.challenge_id = challenge_id
         self.value = solution
+
+    def score(self):
+        return len(self.value)
 
     def __repr__(self):
         return '<Solution for %r: %r>' % (self.challenge_id, self.user)
@@ -157,11 +173,20 @@ class User(UserMixin):
     def is_active(self):
         return self.active
 
+    def is_admin(self):
+        return self.username in config.ADMIN_USERNAMES
+
+    def has_solved(self, challenge):
+        solutions = Solution.query.filter_by(
+            user=self.username, challenge=challenge).all()
+        return len(solutions) > 0
+
     def get_id(self):
         return self.id
 
-    def is_admin(self):
-        return self.username in config.ADMIN_USERNAMES
+    def get_solution(self, challenge):
+        return Solution.query.filter_by(
+            user=self.username, challenge=challenge).first()
 
 
 # MIDDLEWARE

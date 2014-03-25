@@ -5,7 +5,7 @@
 
 		<ul class="challenges">
 			{%- for challenge in challenges %}
-			<li><a href="{{ url_for('challenge', challenge_id=challenge.id) }}" class="challenge">
+			<li><a href="{{ url_for('challenge', challenge_id=challenge.id) }}" class="challenge{% if g.user.has_solved(challenge) %} solved{% endif %}">
 				<date>{{ challenge.date.date() }}</date>
 				#{{ challenge.id }} {{ challenge.name }} - {{ challenge.description }}
 			</a></li>
