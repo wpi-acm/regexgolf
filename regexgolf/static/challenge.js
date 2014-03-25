@@ -39,10 +39,12 @@ if (replace){
 	});
 }
 
-viewOtherSolutions.addEventListener('click', function(e) {
-	otherSolutions.className = "";
-	viewOtherSolutions.className += " hidden";
-});
+if (viewOtherSolutions !== null) {
+    viewOtherSolutions.addEventListener('click', function(e) {
+	    otherSolutions.className = "";
+	    viewOtherSolutions.className += " hidden";
+    });
+}
 
 // Allow the URL to contain regex and replace values
 urlParts = location.search.replace('?', '').split(/[\&\=]/);
