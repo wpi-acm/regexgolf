@@ -89,7 +89,7 @@ class Solution(db.Model):
         self.value = solution
 
     def score(self):
-        return len(self.value)
+        return len(self.value.strip('/').rstrip('/i'))
 
     def __repr__(self):
         return '<Solution for %r: %r>' % (self.challenge_id, self.user)
