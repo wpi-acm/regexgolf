@@ -63,7 +63,8 @@ class Challenge(db.Model):
         my_score = user.get_solution(self).score()
         return Solution.query.filter(
             and_(func.length(Solution.value)) >= my_score,
-                 Solution.user != user.username).all()
+                 Solution.user != user.username,
+                 Solution.challenge == self).all()
 
     def is_solved(self):
         return len(Solution.query.filter_by(challenge=self).all()) > 0
@@ -88,7 +89,7 @@ class Solution(db.Model):
         self.value = solution
 
     def score(self):
-        return len(self.value)
+        return len(self.value.strip('/').rstrip('/i'))
 
     def __repr__(self):
         return '<Solution for %r: %r>' % (self.challenge_id, self.user)
