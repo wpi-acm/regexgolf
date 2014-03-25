@@ -222,7 +222,7 @@ def challenge(challenge_id):
             title="#{} - {}".format(challenge_id, challenge.name),
             challenge=challenge)
     elif request.method == "POST":
-        regex = request.form['solution']
+        regex = request.data
         if challenge.verify(regex):
             existing_solution = Solution.query.filter_by(
                 user=current_user.username, challenge_id=challenge_id)

@@ -75,11 +75,11 @@ if (window.localStorage.hidePassing === 'true') {
 submit.addEventListener('click', function () {
 	var http = new XMLHttpRequest();
 	var url = window.location.href;
-	var params = "solution=" + find.value;
+	var params = find.value;
 	http.open("POST", url, true);
 
 	//Send the proper header information along with the request
-	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.setRequestHeader("Content-type", "text/plain");
 	http.onreadystatechange = function() {//Call a function when the state changes.
 		if (http.readyState == 4 && http.status == 200) {
 			if (http.responseText.length != 0) {
