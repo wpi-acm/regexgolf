@@ -52,9 +52,9 @@ class Challenge(db.Model):
             regex = regex.strip('/').rstrip('/i')
             prog = re.compile(regex)
             for test in self.positive_cases.split('\n'):
-                assert prog.search(test) is not None
+                assert prog.search(test.rstrip('\r')) is not None
             for test in self.negative_cases.split('\n'):
-                assert prog.search(test) is None
+                assert prog.search(test.rstrip('\r')) is None
         except AssertionError:
             return False
         return True
